@@ -7,8 +7,6 @@ const View = styled.View`
   flex: 1;
   padding: 0px 50px;
   padding-top: 100px;
-  /* justify-content: center; */
-  /* align-items: center; */
   background-color: ${colors.bgColor};
 `;
 
@@ -28,6 +26,8 @@ const Btn = styled.TouchableOpacity`
   justify-content: center;
   align-items: center;
   background-color: ${colors.btnColor};
+  elevation: 5;
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
 `;
 
 const BtnText = styled.Text`
