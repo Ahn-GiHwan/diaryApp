@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import colors from "../color";
 import styled from "styled-components/native";
 import { Ionicons } from "@expo/vector-icons";
+import { useDB } from "../context";
+import { FlatList } from "react-native";
 
 const View = styled.View`
   flex: 1;
@@ -34,10 +36,56 @@ const BtnText = styled.Text`
   color: white;
 `;
 
+const Recored = styled.View`
+  flex-direction: row;
+  align-items: center;
+  padding: 10px 20px;
+  border-radius: 10px;
+  background-color: ${colors.cardColor};
+`;
+
+const Emotion = styled.Text`
+  font-size: 24px;
+  margin-right: 10px;
+`;
+const Message = styled.Text`
+  font-size: 18px;
+`;
+
+const Separator = styled.View`
+  height: 10px;
+`;
+
 const Home = ({ navigation: { navigate } }) => {
+  const realm = useDB();
+  const [feelings, setFeelings] = useState([]);
+
+  useEffect(() => {
+    const feelings = realm.objects("Feeling");
+    setFeelings(feelings);
+    feelings.addListener((feelings, changes) => {
+      setFeelings(feelings.sorted("_id"));
+    });
+    return () => {
+      feelings.removeAllListeners();
+    };
+  }, []);
+
   return (
     <View>
       <Title>My journal</Title>
+      <FlatList
+        data={feelings}
+        keyExtractor={(feeling) => String(feeling._id)}
+        contentContainerStyle={{ paddingVertical: 10 }}
+        ItemSeparatorComponent={Separator}
+        renderItem={({ item }) => (
+          <Recored>
+            <Emotion>{item.emotion}</Emotion>
+            <Message>{item.message}</Message>
+          </Recored>
+        )}
+      />
       <Btn onPress={() => navigate("Write")}>
         <BtnText>
           <Ionicons name="add" color="white" size={36} />
