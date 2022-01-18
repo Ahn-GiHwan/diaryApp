@@ -4,6 +4,7 @@ import styled from "styled-components/native";
 import { Ionicons } from "@expo/vector-icons";
 import { useDB } from "../context";
 import { FlatList, LayoutAnimation, TouchableOpacity } from "react-native";
+import { AdMobBanner } from "expo-ads-admob";
 
 const View = styled.View`
   flex: 1;
@@ -82,6 +83,12 @@ const Home = ({ navigation: { navigate } }) => {
   return (
     <View>
       <Title>My journal</Title>
+      <AdMobBanner
+        // bannerSize="fullBanner"
+        adUnitID="ca-app-pub-3940256099942544/2934735716"
+        // servePersonalizedAds
+        // onDidFailToReceiveAdWithError={this.bannerError}
+      />
       <FlatList
         data={feelings}
         keyExtractor={(feeling) => String(feeling._id)}
